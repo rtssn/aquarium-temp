@@ -20,5 +20,5 @@ void loop() {
 }
 ```
 
-参考
+## 参考
 https://karakuri-musha.com/inside-technology/arduino-m5stickc-02-connect-wifi-for-nossid/
