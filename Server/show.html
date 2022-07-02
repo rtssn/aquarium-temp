@@ -17,10 +17,6 @@
     </div>
 
     <script>
-
-        const labels = [];
-        const tempdata = [];
-
         const getData = () => {
             fetch('./index.php')
                 .then(response => response.json())
@@ -32,6 +28,9 @@
 
                     nowTempElement.innerText = data[length - 1].temp;
                     nowElement.innerText = data[length - 1].datetime;
+
+                    const labels = [];
+                    const tempdata = [];
 
                     data.forEach(element => {
                         labels.push(element.datetime);
