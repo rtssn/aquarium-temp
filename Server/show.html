@@ -10,42 +10,61 @@
 
 <body>
     <div>
+        現在(<span id="now"></span>)の水温<span id="now-temp"></span>℃
+    </div>
+    <div>
         <canvas id="myChart"></canvas>
     </div>
 
     <script>
-        fetch('./index.php')
-            .then(response => response.json())
-            .then(data => {
-                const labels = [];
-                const tempdata = [];
 
-                data.forEach(element => {
-                    labels.push(element.datetime);
-                    tempdata.push(element.temp);
+        const labels = [];
+        const tempdata = [];
+
+        const getData = () => {
+            fetch('./index.php')
+                .then(response => response.json())
+                .then(data => {
+                    const nowElement = document.getElementById('now');
+                    const nowTempElement = document.getElementById('now-temp');
+
+                    const length = data.length;
+
+                    nowTempElement.innerText = data[length - 1].temp;
+                    nowElement.innerText = data[length - 1].datetime;
+
+                    data.forEach(element => {
+                        labels.push(element.datetime);
+                        tempdata.push(element.temp);
+                    });
+
+                    const chartData = {
+                        labels: labels,
+                        datasets: [{
+                            label: '水槽水温',
+                            backgroundColor: 'rgb(255, 99, 132)',
+                            borderColor: 'rgb(255, 99, 132)',
+                            data: tempdata,
+                        }]
+                    };
+
+                    const config = {
+                        type: 'line',
+                        data: chartData,
+                        options: {
+                            spanGaps: true
+                        }
+                    };
+
+                    const myChart = new Chart(
+                        document.getElementById('myChart'),
+                        config
+                    );
                 });
+        }
 
-                const chartData = {
-                    labels: labels,
-                    datasets: [{
-                        label: '水槽水温',
-                        backgroundColor: 'rgb(255, 99, 132)',
-                        borderColor: 'rgb(255, 99, 132)',
-                        data: tempdata,
-                    }]
-                };
+        getData();
 
-                const config = {
-                    type: 'line',
-                    data: chartData,
-                    options: {}
-                };
-
-                const myChart = new Chart(
-                    document.getElementById('myChart'),
-                    config
-                );
-            });
     </script>
 </body>
 
