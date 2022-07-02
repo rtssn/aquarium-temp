@@ -7,6 +7,11 @@
 
 #define ONE_WIRE_BUS 33
 
+/**
+ * POST間隔(ms)
+ */
+#define POST_INTERVAL = 5000;
+
 Preferences preferences;
 char ssid[33];
 char password[65];
@@ -62,7 +67,6 @@ void loop()
     GetTemp();
     PostData();
     ShowDisplay();
-    sleep(5000);
 }
 
 /**
@@ -78,15 +82,27 @@ void ShowDisplay()
     M5.lcd.print(tempC);
 }
 
+//送信用カウンタ
+bool isFirst = true;
+unsigned long postLast = 0;
+unsigned long postTime = 0;
+
 void PostData()
 {
-    String data = "{temp: " + String(tempC) + "}";
+    postTime = millis();
+    if (postTime - postLast > 5000 || isFirst == true)
+    {
+        String data = "{\"temp\": " + String(tempC) + "}";
 
-    http.begin("http://192.168.11.100/test/write-to-db.php");
-    http.addHeader("Content-Type", "application/json");
-    http.POST(data);
-    Serial.println(http.getString());
-    http.end();
+        http.begin("http://192.168.11.100/test/aqua/write-to-db.php");
+        http.addHeader("Content-Type", "application/json");
+        http.POST(data);
+        Serial.println(http.getString());
+        http.end();
+
+        postLast = postTime;
+        isFirst = false;
+    }
 }
 
 /**
