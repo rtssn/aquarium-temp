@@ -1,9 +1,9 @@
 <?php
 
 /**
- * 端末からPOSTされた温度情報をデータベースに書き込むクラスです。
+ * 温度情報データベースを操作するクラスです。
  */
-class WriteToDb
+class AquariumTempDb
 {
     /**
      * @var Config 設定情報です。
@@ -45,6 +45,34 @@ class WriteToDb
         }
 
         return $result;
+    }
+
+    function Select($limit = 3600)
+    {
+        $data = array();
+
+        if ($this->db != null)
+        {
+            $query = "SELECT `datetime`, `temp` FROM `temp` ORDER BY `id` DESC LIMIT $limit;";
+
+
+            $stmt = $this->db->prepare($query);
+            $stmt->execute();
+
+            $datetime = '';
+            $temp = 0;
+
+            $stmt->bind_result($datetime, $temp);
+            while ($stmt->fetch())
+            {
+                $data[] = array(
+                    'datetime' => $datetime,
+                    'temp' => $temp
+                );
+            }
+        }
+
+        return $data;
     }
 
     /**

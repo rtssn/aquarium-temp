@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="utf8">
+    <title>水槽水温</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.8.0/dist/chart.min.js"></script>
+</head>
+
+<body>
+    <div>
+        <canvas id="myChart"></canvas>
+    </div>
+
+    <script>
+        fetch('./index.php')
+            .then(response => response.json())
+            .then(data => {
+                const labels = [];
+                const tempdata = [];
+
+                data.forEach(element => {
+                    labels.push(element.datetime);
+                    tempdata.push(element.temp);
+                });
+
+                const chartData = {
+                    labels: labels,
+                    datasets: [{
+                        label: '水槽水温',
+                        backgroundColor: 'rgb(255, 99, 132)',
+                        borderColor: 'rgb(255, 99, 132)',
+                        data: tempdata,
+                    }]
+                };
+
+                const config = {
+                    type: 'line',
+                    data: chartData,
+                    options: {}
+                };
+
+                const myChart = new Chart(
+                    document.getElementById('myChart'),
+                    config
+                );
+            });
+                /*
+*/
+          //  });
+    </script>
+</body>
+
+</html>
