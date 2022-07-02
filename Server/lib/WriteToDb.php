@@ -20,7 +20,7 @@ class WriteToDb
      */
     function __construct()
     {
-        $configJson = file_get_contents('./config.json');
+        $configJson = file_get_contents(__DIR__ . '../config.json');
         $this->config = json_decode($configJson);
 
         $this->ConnectToDb();
