@@ -3,11 +3,25 @@
 require_once('./lib/AquariumTempDb.php');
 require_once('./lib/TempData.php');
 
-$aquariumTempDb = new AquariumTempDb();
+$method = $_SERVER["REQUEST_METHOD"];
 
-
-if ($_SERVER["REQUEST_METHOD"] == "POST")
+switch ($method)
 {
+    case "POST":
+        Post();
+        break;
+
+    case "GET":
+        Get();
+        break;
+}
+
+/**
+ * POST字の処理です。
+ */
+function Post()
+{
+    $aquariumTempDb = new AquariumTempDb();
     $json = file_get_contents('php://input');
     $tempData = new TempData($json);
 
@@ -22,8 +36,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
         echo "NG";
     }
 }
-else
+
+/**
+ * GET時の処理です。
+ */
+function Get()
 {
+    $aquariumTempDb = new AquariumTempDb();
     header("Content-Type: application/json; charset=utf-8");
     $data = $aquariumTempDb->Select();
     $json = json_encode($data);
