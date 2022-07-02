@@ -37,7 +37,7 @@ class WriteToDb
 
         if ($this->db != null)
         {
-            $datetime = date('Y-m-d H:m:s');
+            $datetime = date('Y-m-d H:i:s');
             $query = "INSERT INTO `temp` (`datetime`, `temp`) VALUES ('$datetime', $temp);";
 
             $stmt = $this->db->prepare($query);
