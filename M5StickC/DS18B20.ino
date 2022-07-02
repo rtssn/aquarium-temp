@@ -32,7 +32,7 @@ void setup()
 
     ConnectWiFi();
 
-    M5.Axp.ScreenBreath(7);
+    M5.Axp.ScreenBreath(8);
     M5.Lcd.setRotation(3);
     delay(500);
 }
@@ -77,7 +77,7 @@ void ShowDisplay()
     M5.lcd.setTextFont(2);
     M5.lcd.println("IP Address:");
     M5.Lcd.println(WiFi.localIP());
-    M5.lcd.print("RSSI:");
+    M5.lcd.print("RSSI: ");
     M5.Lcd.println(WiFi.RSSI());
     M5.lcd.setTextFont(4);
     m5.Lcd.print("temp: ");
