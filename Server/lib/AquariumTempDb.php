@@ -53,7 +53,7 @@ class AquariumTempDb
 
         if ($this->db != null)
         {
-            $query = "SELECT `datetime`, `temp` FROM `temp` ORDER BY `id` DESC LIMIT $limit;";
+            $query = "SELECT `datetime`, `temp` FROM `temp` ORDER BY `id` ASC LIMIT $limit;";
 
 
             $stmt = $this->db->prepare($query);
