@@ -62,6 +62,7 @@ void loop()
     GetTemp();
     PostData();
     ShowDisplay();
+    sleep(5000);
 }
 
 /**
@@ -81,7 +82,7 @@ void PostData()
 {
     String data = "{temp: " + String(tempC) + "}";
 
-    http.begin("http://192.168.11.100/test/temp.php");
+    http.begin("http://192.168.11.100/test/write-to-db.php");
     http.addHeader("Content-Type", "application/json");
     http.POST(data);
     Serial.println(http.getString());
@@ -93,9 +94,9 @@ void PostData()
  */
 void GetTemp()
 {
-    Serial.print("Requesting temperatures...");
+    // Serial.print("Requesting temperatures...");
     sensors.requestTemperatures(); // Send the command to get temperatures
-    Serial.println("DONE");
+    // Serial.println("DONE");
     tempC = sensors.getTempCByIndex(0);
 
     if (tempC != DEVICE_DISCONNECTED_C)
