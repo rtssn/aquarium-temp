@@ -13,7 +13,7 @@
 /**
  * POST間隔(ms)
  */
-#define POST_INTERVAL 5000
+#define POST_INTERVAL 60000
 
 Preferences preferences;
 char ssid[33];
