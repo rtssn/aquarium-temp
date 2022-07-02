@@ -1,6 +1,6 @@
 {
     "port": "COM4",
-    "configuration": "PartitionScheme=default,UploadSpeed=1500000,DebugLevel=none",
-    "board": "esp32:esp32:m5stick-c",
+    "configuration": "PartitionScheme=default,CPUFreq=240,UploadSpeed=1500000,DebugLevel=none",
+    "board": "m5stack:esp32:m5stick-c",
     "sketch": "M5StickC\\DS18B20.ino"
 }
