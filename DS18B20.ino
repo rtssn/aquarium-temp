@@ -62,13 +62,17 @@ void loop()
     ShowDisplay();
 }
 
+/**
+ * ディスプレイ表示
+ */
 void ShowDisplay()
 {
     M5.lcd.setCursor(0, 0);
     M5.lcd.setTextFont(4);
     M5.lcd.println("IP Address:");
     M5.Lcd.println(WiFi.localIP());
-    m5.Lcd.println(tempC);
+    m5.Lcd.println("temp: ");
+    M5.lcd.print(tempC);
 }
 
 /**
@@ -84,11 +88,9 @@ void ServerRecieve()
         while (client.connected())
         { //クライアントと接続中は繰り返す処理
             if (client.available())
-            {                           // 受信データがあるとき
-                char c = client.read(); // 1文字読み取る
-                Serial.write(c);        // シリアル・モニタに書き出す
+            {
                 if (c == '\n')
-                { // 改行の文字をチェックし空行なら応答を返す
+                {
                     if (currentLine.length() == 0)
                     {
                         // HTTP headers always start with a response code
@@ -100,7 +102,6 @@ void ServerRecieve()
                         // 受け取ったときの応答
                         client.println("Content-type:text/html");
                         client.println();
-                        // 次の2行がブラウザに表示される
                         client.print("temp:");
                         client.print(tempC);
                         client.print(" C");
@@ -120,16 +121,6 @@ void ServerRecieve()
                     currentLine += c; // add it to the end of
                                       // the currentLine
                 }
-                // Check to see if the client request was
-                // "GET /H" or "GET /L":
-                if (currentLine.endsWith("GET /H"))
-                {
-                    digitalWrite(5, HIGH); // GET /H turns the LED on
-                }
-                if (currentLine.endsWith("GET /L"))
-                {
-                    digitalWrite(5, LOW); // GET /L turns the LED off
-                }
             }
         }
         // close the connection:
@@ -138,6 +129,9 @@ void ServerRecieve()
     }
 }
 
+/**
+ * DS18B20から温度取得
+ */
 void GetTemp()
 {
     Serial.print("Requesting temperatures...");
