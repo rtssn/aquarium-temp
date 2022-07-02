@@ -20,7 +20,7 @@ class WriteToDb
      */
     function __construct()
     {
-        $configJson = file_get_contents(__DIR__ . '../config.json');
+        $configJson = file_get_contents(__DIR__ . '/../config.json');
         $this->config = json_decode($configJson);
 
         $this->ConnectToDb();
@@ -29,9 +29,12 @@ class WriteToDb
     /**
      * データベースへ挿入を行います。
      * @param float $temp 挿入する温度を指定します。
+     * @return bool 結果を返します。trueなら成功、falseなら失敗を示します。
      */
     function Insert($temp)
     {
+        $result = false;
+
         if ($this->db != null)
         {
             $datetime = date('Y-m-d H:m:s');
@@ -40,6 +43,8 @@ class WriteToDb
             $stmt = $this->db->prepare($query);
             $result = $stmt->execute();
         }
+
+        return $result;
     }
 
     /**
