@@ -94,7 +94,7 @@ void PostData()
     {
         String data = "{\"temp\": " + String(tempC) + "}";
 
-        http.begin("http://192.168.11.100/test/aqua/write-to-db.php");
+        http.begin("http://192.168.11.100/test/aqua/");
         http.addHeader("Content-Type", "application/json");
         http.POST(data);
         Serial.println(http.getString());
