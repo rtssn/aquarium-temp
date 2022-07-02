@@ -22,3 +22,13 @@ void loop() {
 
 ## 参考
 https://karakuri-musha.com/inside-technology/arduino-m5stickc-02-connect-wifi-for-nossid/
+
+# データベース設定
+```Server/config.json
+{
+    "host": "your database host",
+    "db": "your database name",
+    "user": "your username",
+    "password": "your pasword"
+}
+```
