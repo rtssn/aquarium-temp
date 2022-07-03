@@ -10,7 +10,7 @@
 
 # Wi-Fi設定
 
-```Arduino
+```C++
 #include <Preferences.h>
 
 Preferences preferences;
@@ -30,7 +30,7 @@ void loop() {
 https://karakuri-musha.com/inside-technology/arduino-m5stickc-02-connect-wifi-for-nossid/
 
 # データベース設定
-```Server/config.json
+```JSON
 {
     "host": "your database host",
     "db": "your database name",
