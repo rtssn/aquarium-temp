@@ -1,10 +1,16 @@
+# 使用ライブラリ
+* OneWire
+  https://github.com/PaulStoffregen/OneWire
+* DallasTemperature
+  https://github.com/milesburton/Arduino-Temperature-Control-Library
+
 # VS Code Arudino プラグイン設定
 
 .vscode/arduino.json の設定は適宜変更してください。
 
 # Wi-Fi設定
 
-```
+```Arduino
 #include <Preferences.h>
 
 Preferences preferences;
