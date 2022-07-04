@@ -1,0 +1,4 @@
+{
+    "port": "COM4",
+    "board": "m5stack:esp32:m5stick-c"
+}
