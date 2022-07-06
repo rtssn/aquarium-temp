@@ -19,6 +19,7 @@ Preferences preferences;
 char ssid[33];
 char password[65];
 float tempC = 0;
+bool getTempStatus = false;
 
 HTTPClient http;
 OneWire oneWire(ONE_WIRE_BUS);
@@ -34,18 +35,36 @@ void setup()
 
     M5.Axp.ScreenBreath(8);
     M5.Lcd.setRotation(3);
-    delay(500);
+
+    FirstGetTemp();
 }
 
 void loop()
 {
-    GetTemp();
-    PostData();
+
+    if (getTempStatus == true)
+    {
+        PostData();
+    }
+
     ShowDisplay();
+
+    CheckConnectWiFi();
 }
 
 /**
- * Wi-Fi接続
+ * 初回取得の処理です。
+ */
+void FirstGetTemp()
+{
+    delay(2000);
+    GetTemp();
+    ShowDisplay();
+    PostData();
+}
+
+/**
+ * Wi-Fi接続処理です。
  */
 void ConnectWiFi()
 {
@@ -69,7 +88,24 @@ void ConnectWiFi()
 }
 
 /**
- * ディスプレイ表示
+ * Wi-Fi状態の確認。切断されていれば再接続を行います。
+ */
+void CheckConnectWiFi()
+{
+
+    if (WiFi.status() != WL_DISCONNECTED)
+    {
+        delay(500);
+
+        Serial.print("WiFi dicconnected.");
+
+        delay(2000);
+        ConnectWiFi();
+    }
+}
+
+/**
+ * ディスプレイ表示処理です。
  */
 void ShowDisplay()
 {
@@ -85,31 +121,37 @@ void ShowDisplay()
 }
 
 //送信用カウンタ
-bool isFirst = true;
 unsigned long postLast = 0;
 unsigned long postTime = 0;
 
-void PostData()
+/**
+ * 温度データ送信のタイマー関数です。
+ */
+void PostDataTimer()
 {
     postTime = millis();
     unsigned long diff = postTime - postLast;
 
-    if (tempC > 0)
+    if (diff > POST_INTERVAL)
     {
-        if (diff > POST_INTERVAL || isFirst == true)
-        {
-            String data = "{\"temp\": " + String(tempC) + "}";
+        PostData();
 
-            http.begin("http://192.168.11.100/test/aqua/api/");
-            http.addHeader("Content-Type", "application/json");
-            http.POST(data);
-            Serial.println(http.getString());
-            http.end();
-
-            postLast = postTime;
-            isFirst = false;
-        }
+        postLast = postTime;
     }
+}
+
+/**
+ * 取得した温度を送信します。
+ */
+void PostData()
+{
+    String data = "{\"temp\": " + String(tempC) + "}";
+
+    http.begin("http://192.168.11.100/test/aqua/api/");
+    http.addHeader("Content-Type", "application/json");
+    http.POST(data);
+    Serial.println(http.getString());
+    http.end();
 }
 
 /**
@@ -124,9 +166,11 @@ void GetTemp()
     {
         Serial.print("Temperature for the device 1 (index 0) is: ");
         Serial.println(tempC);
+        getTempStatus = true;
     }
     else
     {
         Serial.println("Error: Could not read temperature data");
+        getTempStatus = false;
     }
 }
