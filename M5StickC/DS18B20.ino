@@ -94,18 +94,21 @@ void PostData()
     postTime = millis();
     unsigned long diff = postTime - postLast;
 
-    if (diff > POST_INTERVAL || isFirst == true)
+    if (tempC > 0)
     {
-        String data = "{\"temp\": " + String(tempC) + "}";
+        if (diff > POST_INTERVAL || isFirst == true)
+        {
+            String data = "{\"temp\": " + String(tempC) + "}";
 
-        http.begin("http://192.168.11.100/test/aqua/");
-        http.addHeader("Content-Type", "application/json");
-        http.POST(data);
-        Serial.println(http.getString());
-        http.end();
+            http.begin("http://192.168.11.100/test/aqua/api/");
+            http.addHeader("Content-Type", "application/json");
+            http.POST(data);
+            Serial.println(http.getString());
+            http.end();
 
-        postLast = postTime;
-        isFirst = false;
+            postLast = postTime;
+            isFirst = false;
+        }
     }
 }
 

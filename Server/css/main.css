@@ -1,0 +1,31 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #333;
+}
+
+.container {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.innner {
+    border-radius: 10px;
+    background-color: #eee;
+    width: calc(70% - 40px);
+    margin: 10px;
+    padding: 20px;
+}
+
+@media (max-width: 1000px) {
+    .container {
+        align-items: flex-start !important;
+    }
+
+    .innner {
+        width: calc(90% - 40px);
+    }
+}

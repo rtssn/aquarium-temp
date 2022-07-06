@@ -5,15 +5,20 @@
 <head>
     <meta charset="utf8">
     <title>水槽水温</title>
+    <link rel="stylesheet" href="./css/main.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.8.0/dist/chart.min.js"></script>
 </head>
 
 <body>
-    <div>
-        現在(<span id="now"></span>)の水温<span id="now-temp"></span>℃
-    </div>
-    <div>
-        <canvas id="myChart"></canvas>
+    <div class="container">
+        <div class="innner">
+            <div>
+                現在(<span id="now"></span>)の水温<span id="now-temp"></span>℃
+            </div>
+            <div>
+                <canvas id="myChart"></canvas>
+            </div>
+        </div>
     </div>
 
     <script src="./js/chart.js"></script>
