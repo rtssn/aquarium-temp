@@ -1,5 +1,5 @@
 const getData = () => {
-    fetch('./index.php')
+    fetch('./api/index.php')
         .then((response) => response.json())
         .then((data) => {
             const nowElement = document.getElementById('now');
