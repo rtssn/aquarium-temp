@@ -41,10 +41,11 @@ void setup()
 
 void loop()
 {
+    GetTemp();
 
     if (getTempStatus == true)
     {
-        PostData();
+        PostDataTimer();
     }
 
     ShowDisplay();
@@ -60,7 +61,11 @@ void FirstGetTemp()
     delay(2000);
     GetTemp();
     ShowDisplay();
-    PostData();
+
+    if (getTempStatus == true)
+    {
+        PostData();
+    }
 }
 
 /**
@@ -122,14 +127,13 @@ void ShowDisplay()
 
 //送信用カウンタ
 unsigned long postLast = 0;
-unsigned long postTime = 0;
 
 /**
  * 温度データ送信のタイマー関数です。
  */
 void PostDataTimer()
 {
-    postTime = millis();
+    unsigned long postTime = millis();
     unsigned long diff = postTime - postLast;
 
     if (diff > POST_INTERVAL)
