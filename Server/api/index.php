@@ -25,6 +25,13 @@ function Post()
     $json = file_get_contents('php://input');
     $tempData = new TempData($json);
 
+    $logFile = './log';
+
+    $datetime = date('Y-m-d H:i:s');
+    $log = "$datetime: $json \n";
+
+    file_put_contents($logFile, $log, FILE_APPEND);
+
     $result = $aquariumTempDb->Insert($tempData->temp);
 
     if ($result == true)
