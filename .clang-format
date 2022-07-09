@@ -1,17 +1,6 @@
-BreakBeforeBinaryOperators: NonAssignment
+BasedOnStyle: Microsoft
+IndentWidth: 4
+ConstructorInitializerIndentWidth: 4
 ContinuationIndentWidth: 4
-BreakBeforeBraces: Custom
-BraceWrapping:
-  AfterCaseLabel: true
-  AfterClass: true
-  AfterControlStatement: Always
-  AfterEnum: true
-  AfterFunction: true
-  AfterNamespace: true
-  AfterStruct: true
-  AfterUnion: true
-  AfterExternBlock: true
-  BeforeCatch: true
-  BeforeElse: true
-  BeforeLambdaBody: true
-  BeforeWhile: true
+IndentCaseLabels: false
+IndentExternBlock: AfterExternBlock
