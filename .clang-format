@@ -1,6 +1,0 @@
-BasedOnStyle: Microsoft
-IndentWidth: 4
-ConstructorInitializerIndentWidth: 4
-ContinuationIndentWidth: 4
-IndentCaseLabels: false
-IndentExternBlock: AfterExternBlock
