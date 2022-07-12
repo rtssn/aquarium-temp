@@ -12,8 +12,21 @@
 <body>
     <div class="container">
         <div class="innner">
-            <div>
-                現在(<span id="now"></span>)の水温<span id="now-temp"></span>℃
+            <div class="status">
+                <div>
+                    現在(<span id="now"></span>)の水温<span id="now-temp"></span>℃
+                </div>
+                <div>
+                    <h2>過去24時間の状況</h2>
+                </div>
+                <div>
+                    最高水温: <span id="max-temp"></span>℃<br>
+                    日時: <span id="max-temp-datetime"></span>
+                </div>
+                <div>
+                    最低水温: <span id="min-temp"></span>℃<br>
+                    日時: <span id="min-temp-datetime"></span>
+                </div>
             </div>
             <div>
                 <canvas id="myChart"></canvas>
