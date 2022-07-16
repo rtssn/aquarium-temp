@@ -1,7 +1,7 @@
 <?php
 
 require_once('./lib/AquariumTempDb.php');
-require_once('./lib/TempData.php');
+require_once('./lib/TelemetryData.php');
 
 $method = $_SERVER["REQUEST_METHOD"];
 
@@ -23,7 +23,7 @@ function Post()
 {
     $aquariumTempDb = new AquariumTempDb();
     $json = file_get_contents('php://input');
-    $tempData = new TempData($json);
+    $telemetryData = new TelemetryData($json);
 
     $logFile = './log';
 
@@ -32,7 +32,10 @@ function Post()
 
     file_put_contents($logFile, $log, FILE_APPEND);
 
-    $result = $aquariumTempDb->Insert($tempData->temp);
+    $temp = $telemetryData->sensors[0]->temp;
+    file_put_contents($logFile, $temp . "\n", FILE_APPEND);
+
+    $result = $aquariumTempDb->Insert($temp);
 
     if ($result == true)
     {

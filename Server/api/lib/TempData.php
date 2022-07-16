@@ -1,23 +1,14 @@
 <?php
 
-/**
- * 温度データを表すクラスです。
- */
 class TempData
 {
     /**
-     * @var float 温度です。
+     * @var string センサー名です。
      */
-    public $temp;
+    public $name = "";
 
     /**
-     * 温度データのコンストラクタです。
-     * @param string パースするJSONを指定します。
+     * @var float 温度です。
      */
-    function __construct($json)
-    {
-        $data = json_decode($json);
-
-        $this->temp = floatval($data->temp);
-    }
+    public $temp = 0;
 }
