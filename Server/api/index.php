@@ -33,7 +33,11 @@ function Post()
     file_put_contents($logFile, $log, FILE_APPEND);
 
     $temp = $telemetryData->sensors[0]->temp;
-    file_put_contents($logFile, $temp . "\n", FILE_APPEND);
+
+    ob_start();
+    var_dump($telemetryData);
+    $result = ob_get_clean();
+    file_put_contents($logFile, $result . "\n", FILE_APPEND);
 
     $result = $aquariumTempDb->Insert($temp);
 
