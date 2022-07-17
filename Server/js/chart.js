@@ -27,15 +27,15 @@ const createChart = (labels, sensor1Data, sensor2Data) => {
         labels: labels,
         datasets: [
             {
-                label: '水槽水温',
-                backgroundColor: 'rgb(132, 99, 255)',
-                borderColor: 'rgb(132, 99, 255)',
-                data: sensor1Data,
-            },
-            {
                 label: '室温',
                 backgroundColor: 'rgb(255, 99, 132)',
                 borderColor: 'rgb(255, 99, 132)',
+                data: sensor1Data,
+            },
+            {
+                label: '水温',
+                backgroundColor: 'rgb(132, 99, 255)',
+                borderColor: 'rgb(132, 99, 255)',
                 data: sensor2Data,
             },
         ],
@@ -59,12 +59,16 @@ const createChart = (labels, sensor1Data, sensor2Data) => {
 
 const setNowTemp = (data) => {
     const nowElement = document.getElementById('now');
-    const nowTempElement = document.getElementById('now-temp');
+    const nowTankTempElement = document.getElementById('now-tank-temp');
+    const nowRoomTempElement = document.getElementById('now-room-temp');
 
     const length = data.length;
 
-    nowTempElement.innerText = data[length - 1].temp;
-    nowElement.innerText = data[length - 1].datetime;
+    const now = data[length - 1];
+
+    nowElement.innerText = now.datetime;
+    nowTankTempElement.innerText = now.sensor2Temp;
+    nowRoomTempElement.innerText = now.sensor1Temp;
 };
 
 const convertData = (data) => {
