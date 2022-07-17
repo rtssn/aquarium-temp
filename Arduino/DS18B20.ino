@@ -149,10 +149,21 @@ float GetTemp(uint8_t index)
     return tempC;
 }
 
+/**
+ * ファンの制御を行います。
+ */
 void FanControl(bool isFanOn)
 {
     if (isFanOn == true)
     {
+        for (int i = 0 i < 10; i++)
+        {
+            digitalWrite(FAN_CONTROL_PIN, HIGH);
+            delay(100);
+            digitalWrite(FAN_CONTROL_PIN, LOW);
+            delay(100);
+            digitalWrite(FAN_CONTROL_PIN, HIGH);
+        }
         digitalWrite(FAN_CONTROL_PIN, HIGH);
     }
     else
