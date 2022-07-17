@@ -17,7 +17,10 @@ class TelemetryData
      */
     public $ipAddress = "";
 
-    public $isFanOn = false;
+    /**
+     * @var int ファン制御の状態です。
+     */
+    public $isFanOn = 0;
 
 
     /**
@@ -40,6 +43,6 @@ class TelemetryData
         }
 
         $this->ipAddress = $data->ipAddress;
-        $this->isFanOn = (bool)$data->isFanOn;
+        $this->isFanOn = $data->isFanOn;
     }
 }
