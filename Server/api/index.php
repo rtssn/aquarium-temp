@@ -32,8 +32,6 @@ function Post()
 
     file_put_contents($logFile, $log, FILE_APPEND);
 
-    $temp = $telemetryData->sensors[0]->temp;
-
     ob_start();
     var_dump($telemetryData);
     $result = ob_get_clean();
