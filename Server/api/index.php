@@ -2,6 +2,7 @@
 
 require_once('./lib/AquariumTempDb.php');
 require_once('./lib/TelemetryData.php');
+require_once('./lib/Log.php');
 
 $method = $_SERVER["REQUEST_METHOD"];
 
@@ -25,17 +26,11 @@ function Post()
     $json = file_get_contents('php://input');
     $telemetryData = new TelemetryData($json);
 
-    $logFile = './log';
-
     $datetime = date('Y-m-d H:i:s');
     $log = "$datetime: $json \n";
 
-    file_put_contents($logFile, $log, FILE_APPEND);
-
-    ob_start();
-    var_dump($telemetryData);
-    $result = ob_get_clean();
-    file_put_contents($logFile, $result . "\n", FILE_APPEND);
+    Log::Write($log);
+    Log::VarDumpLogWrite($telemetryData);
 
     $sensor1Temp = $telemetryData->sensors[0]->temp;
     $sensor2Temp = $telemetryData->sensors[1]->temp;
