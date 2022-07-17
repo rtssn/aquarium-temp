@@ -26,10 +26,7 @@ function Post()
     $json = file_get_contents('php://input');
     $telemetryData = new TelemetryData($json);
 
-    $datetime = date('Y-m-d H:i:s');
-    $log = "$datetime: $json \n";
-
-    Log::Write($log);
+    Log::Write($json);
     Log::VarDumpLogWrite($telemetryData);
 
     $sensor1Temp = $telemetryData->sensors[0]->temp;

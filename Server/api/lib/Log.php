@@ -11,15 +11,21 @@ class Log
         ob_start();
         var_dump($var);
         $result = ob_get_clean();
-        file_put_contents(__DIR__ . '/../log', $result . "\n", FILE_APPEND);
+
+        $datetime = date('Y-m-d H:i:s');
+        $log = "[$datetime]:\n$result\n";
+
+        file_put_contents(__DIR__ . '/../log', $log, FILE_APPEND);
     }
 
     /**
      * ログの書き込みを行います。
      * @param string $log 書き込むログを指定します。
      */
-    static function Write($log)
+    static function Write($text)
     {
+        $datetime = date('Y-m-d H:i:s');
+        $log = "[$datetime]: $text\n";
         file_put_contents(__DIR__ . '/../log', $log, FILE_APPEND);
     }
 }
