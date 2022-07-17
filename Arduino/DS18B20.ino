@@ -54,7 +54,7 @@ void FirstGetTemp()
 
     if (getTempStatus == true)
     {
-        bool isFanOn = IsFanOn(sensor1_temp);
+        bool isFanOn = IsFanOn(sensor2_temp);
 
         FanControl(isFanOn);
         PostData(sensor1_temp, sensor2_temp, isFanOn);
@@ -76,7 +76,7 @@ void GetTempTimer()
 
         if (getTempStatus == true)
         {
-            bool isFanOn = IsFanOn(sensor1_temp);
+            bool isFanOn = IsFanOn(sensor2_temp);
 
             FanControl(isFanOn);
             PostData(sensor1_temp, sensor2_temp, isFanOn);
