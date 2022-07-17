@@ -41,8 +41,12 @@ class AquariumTempDb
         if ($this->db != null)
         {
             $datetime = date('Y-m-d H:i:s');
-            $query = "INSERT INTO `temp` (`datetime`, `sensor1Temp`, `sensor2Temp`, `isFanOn`, `ipAddress`)
-            VALUES ('$datetime', $sensor1Temp, $sensor2Temp, $isFanOn, $ipAddress);";
+            $query = "INSERT INTO `temp` (`datetime`, `sensor1Temp`, `sensor2Temp`, `isFanOn`, `ipAddress`) VALUES ('$datetime', $sensor1Temp, $sensor2Temp, $isFanOn, '$ipAddress');";
+
+            ob_start();
+            var_dump($query);
+            $result = ob_get_clean();
+            file_put_contents(__DIR__ . '/../log', $result . "\n", FILE_APPEND);
 
             $stmt = $this->db->prepare($query);
             $result = $stmt->execute();
