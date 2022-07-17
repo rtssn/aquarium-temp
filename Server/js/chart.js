@@ -2,9 +2,9 @@ const getData = () => {
     fetch('./api/index.php')
         .then((response) => response.json())
         .then((data) => {
-            const [labels, tempData, minTemp, minTempDatetime, maxTemp, maxTempDatetime] = convertData(data);
+            const [labels, sensor1TempData, sensor2TempData, minTemp, minTempDatetime, maxTemp, maxTempDatetime] = convertData(data);
 
-            createChart(labels, tempData);
+            createChart(labels, sensor1TempData, sensor2TempData);
 
             setNowTemp(data);
 
@@ -22,15 +22,21 @@ const getData = () => {
         });
 };
 
-const createChart = (labels, tempData) => {
+const createChart = (labels, sensor1Data, sensor2Data) => {
     const chartData = {
         labels: labels,
         datasets: [
             {
                 label: '水槽水温',
+                backgroundColor: 'rgb(132, 99, 255)',
+                borderColor: 'rgb(132, 99, 255)',
+                data: sensor1Data,
+            },
+            {
+                label: '室温',
                 backgroundColor: 'rgb(255, 99, 132)',
                 borderColor: 'rgb(255, 99, 132)',
-                data: tempData,
+                data: sensor2Data,
             },
         ],
     };
@@ -63,7 +69,8 @@ const setNowTemp = (data) => {
 
 const convertData = (data) => {
     const labels = [];
-    const tempData = [];
+    const sensor1TempData = [];
+    const sensor2TempData = [];
 
     let minTemp = Number.MAX_SAFE_INTEGER;
     let maxTemp = Number.MIN_SAFE_INTEGER;
@@ -73,18 +80,19 @@ const convertData = (data) => {
 
     data.forEach((element) => {
         labels.push(element.datetime);
-        tempData.push(element.temp);
+        sensor1TempData.push(element.sensor1Temp);
+        sensor2TempData.push(element.sensor2Temp);
 
-        if (minTemp > element.temp) {
-            minTemp = element.temp;
+        if (minTemp > element.sensor1Temp) {
+            minTemp = element.sensor1Temp;
             minTempDatetime = element.datetime;
-        } else if (maxTemp < element.temp) {
-            maxTemp = element.temp;
+        } else if (maxTemp < element.sensor1Temp) {
+            maxTemp = element.sensor1Temp;
             maxTempDatetime = element.datetime;
         }
     });
 
-    return [labels, tempData, minTemp, minTempDatetime, maxTemp, maxTempDatetime];
+    return [labels, sensor1TempData, sensor2TempData, minTemp, minTempDatetime, maxTemp, maxTempDatetime];
 };
 
 getData();
