@@ -16,6 +16,12 @@
 
 #define FAN_CONTROL_PIN 6
 
+/*
+const double PWM_Hz = 2000;  // PWM周波数
+const uint8_t PWM_level = 8; // PWM分解能 16bit(1～256)
+const uint8_t PWM_CH = 1;    // チャンネル
+*/
+
 HTTPClient http;
 OneWire oneWire(ONE_WIRE_BUS);
 DallasTemperature sensors(&oneWire);
@@ -25,22 +31,69 @@ bool getTempStatus = false;
 //温度取得用タイマーカウンタ
 unsigned long postLast = 0;
 
+DeviceAddress deviceAddress1;
+DeviceAddress deviceAddress2;
+
+String hexDeviceAddress1;
+String hexDeviceAddress2;
+
 void setup()
 {
+    //チャンネルと周波数の分解能を設定
+    // ledcSetup(PWM_CH, PWM_Hz, PWM_level);
+    //モータのピンとチャンネルの設定
+    // ledcAttachPin(8, PWM_CH);
+
     Serial.begin(115200);
     delay(5000);
 
-    ConnectWiFi();
-
-    FirstGetTemp();
-
     pinMode(FAN_CONTROL_PIN, OUTPUT);
+
+    sensors.begin();
+
+    GetDeviceAddress();
+
+    ConnectWiFi();
+    FirstGetTemp();
 }
 
 void loop()
 {
     GetTempTimer();
     CheckConnectWiFi();
+}
+
+void GetDeviceAddress()
+{
+    Serial.println("device address1:");
+    if (sensors.getAddress(deviceAddress1, 0))
+    {
+        for (int i = 0; i < 8; i++)
+        {
+            char buf[2];
+            sprintf(buf, "%x", deviceAddress1[i]);
+            hexDeviceAddress1 = hexDeviceAddress1 + String(buf) + " ";
+            Serial.print(deviceAddress1[i], HEX);
+        }
+        hexDeviceAddress1.trim();
+
+        Serial.println();
+    }
+
+    Serial.println("device address2:");
+    if (sensors.getAddress(deviceAddress2, 1))
+    {
+        for (int i = 0; i < 8; i++)
+        {
+            char buf[2];
+            sprintf(buf, "%x", deviceAddress2[i]);
+            hexDeviceAddress2 = hexDeviceAddress2 + String(buf) + " ";
+            Serial.print(deviceAddress2[i], HEX);
+        }
+        hexDeviceAddress2.trim();
+
+        Serial.println();
+    }
 }
 
 /**
@@ -104,8 +157,8 @@ bool IsFanOn(float temp)
 void PostData(float sensor1_temp, float sensor2_temp, bool isFanOn)
 {
     String sensors = "[";
-    sensors = sensors + "{\"temp\": " + String(sensor1_temp) + "},";
-    sensors = sensors + "{\"temp\": " + String(sensor2_temp) + "}";
+    sensors = sensors + "{\"addoress\": \"" + hexDeviceAddress1 + "\", \"temp\": " + String(sensor1_temp) + "},";
+    sensors = sensors + "{\"addoress\": \"" + hexDeviceAddress2 + "\", \"temp\": " + String(sensor2_temp) + "}";
     sensors = sensors + "]";
 
     String sensorString = "\"sensors\": " + sensors;
@@ -156,13 +209,11 @@ void FanControl(bool isFanOn)
 {
     if (isFanOn == true)
     {
-        for (int i = 0 i < 10; i++)
+        for (int i = 0; i < 255; i++)
         {
             digitalWrite(FAN_CONTROL_PIN, HIGH);
-            delay(100);
+            delay(10);
             digitalWrite(FAN_CONTROL_PIN, LOW);
-            delay(100);
-            digitalWrite(FAN_CONTROL_PIN, HIGH);
         }
         digitalWrite(FAN_CONTROL_PIN, HIGH);
     }
