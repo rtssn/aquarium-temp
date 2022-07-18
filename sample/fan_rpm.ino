@@ -20,15 +20,16 @@ void setup()
 
     pinMode(8, OUTPUT);
 
-    チャンネルと周波数の分解能を設定
+    //チャンネルと周波数の分解能を設定
     ledcSetup(PWM_CH, PWM_Hz, PWM_level);
-    モータのピンとチャンネルの設定
+    //モータのピンとチャンネルの設定
     ledcAttachPin(8, PWM_CH);
 }
 
 void loop()
 {
     GetFanRpm();
+    ledcWrite(PWM_CH, 50)
 }
 
 void GetFanRpm()
