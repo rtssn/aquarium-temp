@@ -46,6 +46,7 @@ const createChart = (labels, sensor1Data, sensor2Data) => {
         data: chartData,
         options: {
             spanGaps: true,
+            maintainAspectRatio: false,
             elements: {
                 point: {
                     radius: 0,
@@ -87,11 +88,11 @@ const convertData = (data) => {
         sensor1TempData.push(element.sensor1Temp);
         sensor2TempData.push(element.sensor2Temp);
 
-        if (minTemp > element.sensor1Temp) {
-            minTemp = element.sensor1Temp;
+        if (minTemp > element.sensor2Temp) {
+            minTemp = element.sensor2Temp;
             minTempDatetime = element.datetime;
         } else if (maxTemp < element.sensor1Temp) {
-            maxTemp = element.sensor1Temp;
+            maxTemp = element.sensor2Temp;
             maxTempDatetime = element.datetime;
         }
     });
