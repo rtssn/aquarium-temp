@@ -21,12 +21,12 @@
  */
 #define LED_PIN 2
 
-#define THRESHOLD_TEMP 30
+#define THRESHOLD_TEMP 26
 
 /**
  * POST間隔(ms)
  */
-#define POST_INTERVAL 10000
+#define POST_INTERVAL 60000
 
 /*
 const double PWM_Hz = 2000;  // PWM周波数
@@ -41,8 +41,11 @@ Adafruit_NeoPixel pixels(1, LED_PIN, NEO_GRB + NEO_KHZ800);
 
 bool getTempStatus = false;
 
-//温度取得用タイマーカウンタ
+//温度取得用タイマーカウンター
 unsigned long postLast = 0;
+
+// WiFi接続確認用タイマーカウンター
+unsigned long checkConnectWiFiLas = 0;
 
 DeviceAddress deviceAddress1;
 DeviceAddress deviceAddress2;
@@ -60,10 +63,10 @@ void setup()
     // ledcAttachPin(8, PWM_CH);
 
     Serial.begin(115200);
+    Serial.println("init...");
+
     pixels.begin();
     sensors.begin();
-
-    Serial.println("init...");
 
     pinMode(FAN_CONTROL_PIN, OUTPUT);
     pinMode(BUTTON_PIN, INPUT);
@@ -298,8 +301,6 @@ void CheckConnectWiFi()
 {
     if (WiFi.status() != WL_CONNECTED)
     {
-        delay(500);
-
         Serial.print("WiFi dicconnected.");
 
         delay(10000);
@@ -309,27 +310,40 @@ void CheckConnectWiFi()
 
 void SetStatusLED()
 {
+    uint8_t g = 0;
+    uint8_t b = 0;
+
+    bool isError = false;
+
     if (isFanOn == true)
     {
-        pixels.setPixelColor(0, pixels.Color(35, 78, 15));
-        pixels.show();
+        g = 255;
     }
     else
     {
-        pixels.setPixelColor(0, pixels.Color(0, 0, 0));
-        pixels.show();
+        g = 0;
     }
 
     if (WiFi.status() == WL_CONNECTED)
     {
-        pixels.setPixelColor(0, pixels.Color(0, 0, 255));
-        pixels.show();
+        b = 255;
+    }
+    else
+    {
+        b = 0;
+        isError = true;
+    }
+
+    if (isError == false)
+    {
+        pixels.setPixelColor(0, pixels.Color(0, g, b));
     }
     else
     {
         pixels.setPixelColor(0, pixels.Color(255, 27, 44));
-        pixels.show();
     }
+
+    pixels.show();
 }
 
 void StatusSendToSerial()
@@ -353,7 +367,7 @@ void StatusSendToSerial()
 
     Serial.println("Sensor Status");
     Serial.println("Sensor Count: ");
-    Serial.print(sensors.getDS18Count());
+    Serial.println(sensors.getDS18Count());
     Serial.println("Sensor1 Address: ");
     Serial.println(hexDeviceAddress1);
     Serial.println("Sensor2 Address: ");
