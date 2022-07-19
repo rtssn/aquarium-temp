@@ -1,3 +1,4 @@
+#include <Adafruit_NeoPixel.h>
 #include <DallasTemperature.h>
 #include <HTTPClient.h>
 #include <OneWire.h>
@@ -8,13 +9,22 @@
  * 1-Wireのピン
  */
 #define ONE_WIRE_BUS 5
+/**
+ * ファン制御ピン
+ */
+#define FAN_CONTROL_PIN 4
+
+/**
+ * ステータスLEDピン
+ */
+#define LED_PIN 2
+
+#define THRESHOLD_TEMP 30
 
 /**
  * POST間隔(ms)
  */
-#define POST_INTERVAL 60000
-
-#define FAN_CONTROL_PIN 6
+#define POST_INTERVAL 10000
 
 /*
 const double PWM_Hz = 2000;  // PWM周波数
@@ -25,6 +35,7 @@ const uint8_t PWM_CH = 1;    // チャンネル
 HTTPClient http;
 OneWire oneWire(ONE_WIRE_BUS);
 DallasTemperature sensors(&oneWire);
+Adafruit_NeoPixel pixels(1, LED_PIN, NEO_GRB + NEO_KHZ800);
 
 bool getTempStatus = false;
 
@@ -37,6 +48,8 @@ DeviceAddress deviceAddress2;
 String hexDeviceAddress1;
 String hexDeviceAddress2;
 
+bool isFanOn = false;
+
 void setup()
 {
     //チャンネルと周波数の分解能を設定
@@ -45,22 +58,28 @@ void setup()
     // ledcAttachPin(8, PWM_CH);
 
     Serial.begin(115200);
-    delay(5000);
+    pixels.begin();
+    sensors.begin();
 
     pinMode(FAN_CONTROL_PIN, OUTPUT);
 
-    sensors.begin();
+    pixels.setPixelColor(0, pixels.Color(255, 27, 44)); // Colorメソッド内の引数の順番は赤、緑、青
+    delay(100);
+    pixels.setBrightness(32);
+    pixels.show();
+
+    delay(5000);
 
     GetDeviceAddress();
-
     ConnectWiFi();
     FirstGetTemp();
 }
 
 void loop()
 {
-    GetTempTimer();
     CheckConnectWiFi();
+    SetStatusLED();
+    GetTempTimer();
 }
 
 void GetDeviceAddress()
@@ -107,9 +126,9 @@ void FirstGetTemp()
 
     if (getTempStatus == true)
     {
-        bool isFanOn = IsFanOn(sensor2_temp);
+        IsFanOn(sensor2_temp);
 
-        FanControl(isFanOn);
+        FanControl();
         PostData(sensor1_temp, sensor2_temp, isFanOn);
     }
 }
@@ -129,9 +148,9 @@ void GetTempTimer()
 
         if (getTempStatus == true)
         {
-            bool isFanOn = IsFanOn(sensor2_temp);
+            IsFanOn(sensor2_temp);
 
-            FanControl(isFanOn);
+            FanControl();
             PostData(sensor1_temp, sensor2_temp, isFanOn);
         }
 
@@ -139,16 +158,12 @@ void GetTempTimer()
     }
 }
 
-bool IsFanOn(float temp)
+void IsFanOn(float temp)
 {
-    bool ret = false;
-
-    if (temp >= 26)
+    if (temp >= THRESHOLD_TEMP)
     {
-        ret = true;
+        isFanOn = true;
     }
-
-    return ret;
 }
 
 /**
@@ -205,7 +220,7 @@ float GetTemp(uint8_t index)
 /**
  * ファンの制御を行います。
  */
-void FanControl(bool isFanOn)
+void FanControl()
 {
     if (isFanOn == true)
     {
@@ -241,14 +256,22 @@ void ConnectWiFi()
     WiFi.begin(ssid, password);
     while (WiFi.status() != WL_CONNECTED)
     {
-        delay(500);
+        pixels.setPixelColor(0, pixels.Color(0, 0, 255)); // Colorメソッド内の引数の順番は赤、緑、青
+        pixels.show();
+        delay(250);
         Serial.print(".");
+        pixels.setPixelColor(0, pixels.Color(0, 0, 0)); // Colorメソッド内の引数の順番は赤、緑、青
+        pixels.show();
+        delay(250);
     }
 
     Serial.println("");
     Serial.println("WiFi connected");
     Serial.println("IP address: ");
     Serial.println(WiFi.localIP());
+
+    pixels.setPixelColor(0, pixels.Color(0, 0, 255));
+    pixels.show();
 }
 
 /**
@@ -264,5 +287,30 @@ void CheckConnectWiFi()
 
         delay(10000);
         ConnectWiFi();
+    }
+}
+
+void SetStatusLED()
+{
+    if (WiFi.status() == WL_CONNECTED)
+    {
+        pixels.setPixelColor(0, pixels.Color(0, 0, 255));
+        pixels.show();
+    }
+    else
+    {
+        pixels.setPixelColor(0, pixels.Color(255, 27, 44));
+        pixels.show();
+    }
+
+    if (isFanOn == true)
+    {
+        pixels.setPixelColor(0, pixels.Color(35, 78, 15));
+        pixels.show();
+    }
+    else
+    {
+        pixels.setPixelColor(0, pixels.Color(0, 0, 0));
+        pixels.show();
     }
 }
