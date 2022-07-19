@@ -38,3 +38,7 @@ https://karakuri-musha.com/inside-technology/arduino-m5stickc-02-connect-wifi-fo
     "password": "your pasword"
 }
 ```
+
+### tool/reset.py
+M5 Stamp C3Uをリセットするスクリプトです。
+動作させるにはpyserialが必要です。
