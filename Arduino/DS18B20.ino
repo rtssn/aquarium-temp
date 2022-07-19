@@ -9,11 +9,15 @@
  * 1-Wireのピン
  */
 #define ONE_WIRE_BUS 5
+
 /**
  * ファン制御ピン
  */
 #define FAN_CONTROL_PIN 4
 
+/**
+ * ステータス送信ボタンピン
+ */
 #define BUTTON_PIN 9
 
 /**
@@ -21,6 +25,9 @@
  */
 #define LED_PIN 2
 
+/**
+ * ファン稼働温度
+ */
 #define THRESHOLD_TEMP 26
 
 /**
@@ -55,6 +62,9 @@ String hexDeviceAddress2;
 
 bool isFanOn = false;
 
+/**
+ * 初期化関数です。
+ */
 void setup()
 {
     //チャンネルと周波数の分解能を設定
@@ -85,6 +95,9 @@ void setup()
     FirstGetTemp();
 }
 
+/**
+ * メインループ関数です。
+ */
 void loop()
 {
     CheckConnectWiFi();
@@ -95,39 +108,6 @@ void loop()
     if (pushButton == 0)
     {
         StatusSendToSerial();
-    }
-}
-
-void GetDeviceAddress()
-{
-    Serial.println("device address1:");
-    if (sensors.getAddress(deviceAddress1, 0))
-    {
-        for (int i = 0; i < 8; i++)
-        {
-            char buf[2];
-            sprintf(buf, "%x", deviceAddress1[i]);
-            hexDeviceAddress1 = hexDeviceAddress1 + String(buf) + " ";
-            Serial.print(deviceAddress1[i], HEX);
-        }
-        hexDeviceAddress1.trim();
-
-        Serial.println();
-    }
-
-    Serial.println("device address2:");
-    if (sensors.getAddress(deviceAddress2, 1))
-    {
-        for (int i = 0; i < 8; i++)
-        {
-            char buf[2];
-            sprintf(buf, "%x", deviceAddress2[i]);
-            hexDeviceAddress2 = hexDeviceAddress2 + String(buf) + " ";
-            Serial.print(deviceAddress2[i], HEX);
-        }
-        hexDeviceAddress2.trim();
-
-        Serial.println();
     }
 }
 
@@ -171,18 +151,6 @@ void GetTempTimer()
         }
 
         postLast = postTime;
-    }
-}
-
-void IsFanOn(float temp)
-{
-    if (temp >= THRESHOLD_TEMP)
-    {
-        isFanOn = true;
-    }
-    else
-    {
-        isFanOn = false;
     }
 }
 
@@ -235,6 +203,21 @@ float GetTemp(uint8_t index)
     }
 
     return tempC;
+}
+
+/**
+ * ファンを稼働させるかの判定を行います。
+ */
+void IsFanOn(float temp)
+{
+    if (temp >= THRESHOLD_TEMP)
+    {
+        isFanOn = true;
+    }
+    else
+    {
+        isFanOn = false;
+    }
 }
 
 /**
@@ -308,6 +291,45 @@ void CheckConnectWiFi()
     }
 }
 
+/**
+ * 1-Wireにつながっているデバイスアドレスの取得を行います。
+ */
+void GetDeviceAddress()
+{
+    Serial.println("device address1:");
+    if (sensors.getAddress(deviceAddress1, 0))
+    {
+        for (int i = 0; i < 8; i++)
+        {
+            char buf[2];
+            sprintf(buf, "%x", deviceAddress1[i]);
+            hexDeviceAddress1 = hexDeviceAddress1 + String(buf) + " ";
+            Serial.print(deviceAddress1[i], HEX);
+        }
+        hexDeviceAddress1.trim();
+
+        Serial.println();
+    }
+
+    Serial.println("device address2:");
+    if (sensors.getAddress(deviceAddress2, 1))
+    {
+        for (int i = 0; i < 8; i++)
+        {
+            char buf[2];
+            sprintf(buf, "%x", deviceAddress2[i]);
+            hexDeviceAddress2 = hexDeviceAddress2 + String(buf) + " ";
+            Serial.print(deviceAddress2[i], HEX);
+        }
+        hexDeviceAddress2.trim();
+
+        Serial.println();
+    }
+}
+
+/**
+ * ステータスLEDの状態を設定します。
+ */
 void SetStatusLED()
 {
     uint8_t g = 0;
@@ -346,6 +368,9 @@ void SetStatusLED()
     pixels.show();
 }
 
+/**
+ * 状態をシリアル通信で送信します。
+ */
 void StatusSendToSerial()
 {
     Serial.println("");
