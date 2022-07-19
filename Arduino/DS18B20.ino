@@ -14,6 +14,8 @@
  */
 #define FAN_CONTROL_PIN 4
 
+#define BUTTON_PIN 9
+
 /**
  * ステータスLEDピン
  */
@@ -61,7 +63,10 @@ void setup()
     pixels.begin();
     sensors.begin();
 
+    Serial.println("init...");
+
     pinMode(FAN_CONTROL_PIN, OUTPUT);
+    pinMode(BUTTON_PIN, INPUT);
 
     pixels.setPixelColor(0, pixels.Color(255, 27, 44)); // Colorメソッド内の引数の順番は赤、緑、青
     delay(100);
@@ -72,6 +77,8 @@ void setup()
 
     GetDeviceAddress();
     ConnectWiFi();
+    StatusSendToSerial();
+
     FirstGetTemp();
 }
 
@@ -80,6 +87,12 @@ void loop()
     CheckConnectWiFi();
     SetStatusLED();
     GetTempTimer();
+
+    int pushButton = digitalRead(BUTTON_PIN);
+    if (pushButton == 0)
+    {
+        StatusSendToSerial();
+    }
 }
 
 void GetDeviceAddress()
@@ -163,6 +176,10 @@ void IsFanOn(float temp)
     if (temp >= THRESHOLD_TEMP)
     {
         isFanOn = true;
+    }
+    else
+    {
+        isFanOn = false;
     }
 }
 
@@ -292,17 +309,6 @@ void CheckConnectWiFi()
 
 void SetStatusLED()
 {
-    if (WiFi.status() == WL_CONNECTED)
-    {
-        pixels.setPixelColor(0, pixels.Color(0, 0, 255));
-        pixels.show();
-    }
-    else
-    {
-        pixels.setPixelColor(0, pixels.Color(255, 27, 44));
-        pixels.show();
-    }
-
     if (isFanOn == true)
     {
         pixels.setPixelColor(0, pixels.Color(35, 78, 15));
@@ -313,4 +319,46 @@ void SetStatusLED()
         pixels.setPixelColor(0, pixels.Color(0, 0, 0));
         pixels.show();
     }
+
+    if (WiFi.status() == WL_CONNECTED)
+    {
+        pixels.setPixelColor(0, pixels.Color(0, 0, 255));
+        pixels.show();
+    }
+    else
+    {
+        pixels.setPixelColor(0, pixels.Color(255, 27, 44));
+        pixels.show();
+    }
+}
+
+void StatusSendToSerial()
+{
+    Serial.println("");
+    Serial.println("===============================================");
+    Serial.println("WiFi Status: ");
+
+    if (WiFi.status() != WL_CONNECTED)
+    {
+        Serial.println("WiFi dicconnected.");
+    }
+    else
+    {
+        Serial.println("WiFi connected");
+        Serial.println("IP address: ");
+        Serial.println(WiFi.localIP());
+    }
+
+    Serial.println("");
+
+    Serial.println("Sensor Status");
+    Serial.println("Sensor Count: ");
+    Serial.print(sensors.getDS18Count());
+    Serial.println("Sensor1 Address: ");
+    Serial.println(hexDeviceAddress1);
+    Serial.println("Sensor2 Address: ");
+    Serial.println(hexDeviceAddress2);
+
+    Serial.println("===============================================");
+    Serial.println("");
 }
