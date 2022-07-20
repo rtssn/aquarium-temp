@@ -227,6 +227,7 @@ void IsFanOn(float temp)
 
 /**
  * ファンの制御を行います。
+ * 12Vファンを5Vで稼働させているので起動失敗防止に255回オンオフ繰り返し
  */
 void FanControl()
 {
