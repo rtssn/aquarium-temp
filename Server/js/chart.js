@@ -1,27 +1,37 @@
+/**
+ * データの取得を行います。
+ */
 const getData = () => {
     fetch('./api/index.php')
         .then((response) => response.json())
         .then((data) => {
-            const [labels, sensor1TempData, sensor2TempData, minTemp, minTempDatetime, maxTemp, maxTempDatetime] = convertData(data);
+            const chartData = convertData(data);
 
-            createChart(labels, sensor1TempData, sensor2TempData);
+            createChart(chartData.labels, chartData.sensor1TempData, chartData.sensor2TempData);
 
+            createListTable(data);
             setNowTemp(data);
 
             const minTempElement = document.getElementById('min-temp');
-            const minTempDatetimeElement = document.getElementById('min-temp-datetime');
+            const minTempdatetimeElement = document.getElementById('min-temp-datetime');
 
-            minTempElement.innerText = minTemp;
-            minTempDatetimeElement.innerText = minTempDatetime;
+            minTempElement.innerText = chartData.minTemp.temp;
+            minTempdatetimeElement.innerText = chartData.minTemp.datetime;
 
             const maxTempElement = document.getElementById('max-temp');
-            const maxTempDatetimeElement = document.getElementById('max-temp-datetime');
+            const maxTempdatetimeElement = document.getElementById('max-temp-datetime');
 
-            maxTempElement.innerText = maxTemp;
-            maxTempDatetimeElement.innerText = maxTempDatetime;
+            maxTempElement.innerText = chartData.maxTemp.temp;
+            maxTempdatetimeElement.innerText = chartData.maxTemp.datetime;
         });
 };
 
+/**
+ * グラフの生成を行います。
+ * @param {Array<string>} labels グラフのラベルを指定します。
+ * @param {Array<float>} sensor1Data 室温のデータを指定します。
+ * @param {Array<float>} sensor2Data 水温のデータを指定します。
+ */
 const createChart = (labels, sensor1Data, sensor2Data) => {
     const chartData = {
         labels: labels,
@@ -58,6 +68,10 @@ const createChart = (labels, sensor1Data, sensor2Data) => {
     const myChart = new Chart(document.getElementById('myChart'), config);
 };
 
+/**
+ * 現在の水温・湿度を表示します。
+ * @param {*} data
+ */
 const setNowTemp = (data) => {
     const nowElement = document.getElementById('now');
     const nowTankTempElement = document.getElementById('now-tank-temp');
@@ -72,6 +86,9 @@ const setNowTemp = (data) => {
     nowRoomTempElement.innerText = now.sensor1Temp;
 };
 
+/**
+ * グラフ用にデータの変換を行います。
+ */
 const convertData = (data) => {
     const labels = [];
     const sensor1TempData = [];
@@ -80,8 +97,8 @@ const convertData = (data) => {
     let minTemp = Number.MAX_SAFE_INTEGER;
     let maxTemp = Number.MIN_SAFE_INTEGER;
 
-    let minTempDatetime = '';
-    let maxTempDatetime = '';
+    let minTempdatetime = '';
+    let maxTempdatetime = '';
 
     data.forEach((element) => {
         labels.push(element.datetime);
@@ -90,14 +107,83 @@ const convertData = (data) => {
 
         if (minTemp > element.sensor2Temp) {
             minTemp = element.sensor2Temp;
-            minTempDatetime = element.datetime;
+            minTempdatetime = element.datetime;
         } else if (maxTemp < element.sensor1Temp) {
             maxTemp = element.sensor2Temp;
-            maxTempDatetime = element.datetime;
+            maxTempdatetime = element.datetime;
         }
     });
 
-    return [labels, sensor1TempData, sensor2TempData, minTemp, minTempDatetime, maxTemp, maxTempDatetime];
+    const ret = {
+        labels: labels,
+        sensor1TempData: sensor1TempData,
+        sensor2TempData: sensor2TempData,
+        minTemp: {
+            datetime: minTempdatetime,
+            temp: minTemp,
+        },
+        maxTemp: {
+            datetime: maxTempdatetime,
+            temp: maxTemp,
+        },
+    };
+
+    return ret;
+};
+
+const createListTable = (data) => {
+    const table = document.getElementById('list');
+
+    data.forEach((element) => {
+        const datetime = element.datetime;
+        const sensor1Temp = element.sensor1Temp;
+        const sensor2Temp = element.sensor2Temp;
+        const fanOn = element.isFanOn;
+
+        const datetimeCell = createCol(datetime);
+        const sensor1TempCell = createCol(sensor1Temp);
+        const sensor2TempCell = createCol(sensor2Temp);
+
+        const fanOnCell = createCol(sensor1Temp);
+
+        if (fanOn == 1) {
+            fanOnCell.innerText = 'ON';
+        } else {
+            fanOnCell.innerText = 'OFF';
+        }
+
+        const cols = [datetimeCell, sensor1TempCell, sensor2TempCell, fanOnCell];
+        const row = createRow(cols);
+
+        table.appendChild(row);
+    });
+};
+
+/**
+ * テーブルのカラムを生成します。
+ * @param {} data
+ * @returns 生成したカラム要素を返します。
+ */
+const createCol = (data) => {
+    const ret = document.createElement('td');
+    ret.innerText = data;
+
+    return ret;
+};
+
+/**
+ * テーブルの行を生成します。
+ * @param {Array<HTMLTableCellElement>} cols
+ * @returns 生成した行を返します。
+ */
+const createRow = (cols) => {
+    const ret = document.createElement('tr');
+
+    cols.forEach((col) => {
+        ret.appendChild(col);
+    });
+
+    return ret;
 };
 
 getData();

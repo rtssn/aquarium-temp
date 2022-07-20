@@ -60,7 +60,7 @@ class AquariumTempDb
 
         if ($this->db != null)
         {
-            $query = "SELECT `datetime`, `sensor1Temp`, `sensor2Temp` FROM `temp` WHERE `datetime` > ( NOW( ) - INTERVAL 1 DAY ) ORDER BY `id` ASC LIMIT $limit;";
+            $query = "SELECT `datetime`, `sensor1Temp`, `sensor2Temp`, `isFanOn` FROM `temp` WHERE `datetime` > ( NOW( ) - INTERVAL 1 DAY ) ORDER BY `id` ASC LIMIT $limit;";
 
 
             $stmt = $this->db->prepare($query);
@@ -69,13 +69,19 @@ class AquariumTempDb
             $datetime = '';
             $temp = 0;
 
-            $stmt->bind_result($datetime, $sensor1Temp, $sensor2Temp);
+            $datetime = '';
+            $sensor1Temp = 0;
+            $sensor2Temp = 0;
+            $isFanOn = 0;
+
+            $stmt->bind_result($datetime, $sensor1Temp, $sensor2Temp, $isFanOn);
             while ($stmt->fetch())
             {
                 $data[] = array(
                     'datetime' => $datetime,
                     'sensor1Temp' => $sensor1Temp,
-                    'sensor2Temp' => $sensor2Temp
+                    'sensor2Temp' => $sensor2Temp,
+                    'isFanOn' => $isFanOn
                 );
             }
         }

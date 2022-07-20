@@ -8,6 +8,30 @@ body {
     font-family: 'M PLUS 1p', sans-serif;
 }
 
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+tr {
+    border-bottom: solid 1px rgb(182, 182, 182);
+}
+
+td:first-child {
+    text-align: left !important;
+    font-weight: bold;
+}
+
+td {
+    margin: 0;
+    padding: 5px;
+    text-align: center;
+}
+
+tr:nth-child(2n) {
+    background-color: rgb(219, 230, 255);
+}
+
 .container {
     width: 100vw;
     display: flex;
