@@ -8,6 +8,10 @@ body {
     font-family: 'M PLUS 1p', sans-serif;
 }
 
+h2 {
+    margin: 0;
+}
+
 table {
     width: 100%;
     border-collapse: collapse;
@@ -40,6 +44,7 @@ tr:nth-child(2n) {
 }
 
 .innner {
+    display: block;
     border-radius: 10px;
     background-color: #eee;
     width: calc(80% - 20px);
@@ -53,16 +58,8 @@ tr:nth-child(2n) {
     }
 }
 
-.status {
-    margin-bottom: 20px;
-}
-
-.status h2 {
-    margin-top: 30px;
-}
-
-.status div {
-    margin-bottom: 10px;
+#last-24-hours {
+    margin-top: 40px;
 }
 
 #myChart {

@@ -76,6 +76,7 @@ const setNowTemp = (data) => {
     const nowElement = document.getElementById('now');
     const nowTankTempElement = document.getElementById('now-tank-temp');
     const nowRoomTempElement = document.getElementById('now-room-temp');
+    const nowFanElement = document.getElementById('now-fan');
 
     const length = data.length;
 
@@ -84,6 +85,12 @@ const setNowTemp = (data) => {
     nowElement.innerText = now.datetime;
     nowTankTempElement.innerText = now.sensor2Temp;
     nowRoomTempElement.innerText = now.sensor1Temp;
+
+    if (now.isFanOn == 1) {
+        nowFanElement.innerText = 'ON';
+    } else {
+        nowFanElement.innerText = 'OFF';
+    }
 };
 
 /**
