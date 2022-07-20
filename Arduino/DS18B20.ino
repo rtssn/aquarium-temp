@@ -28,7 +28,12 @@
 /**
  * ファン稼働温度
  */
-#define THRESHOLD_TEMP 26
+#define FAN_ON_TEMP 26
+
+/**
+ * ファン停止温度
+ */
+#define FAN_OFF_TEMP 25
 
 /**
  * POST間隔(ms)
@@ -210,11 +215,11 @@ float GetTemp(uint8_t index)
  */
 void IsFanOn(float temp)
 {
-    if (temp >= THRESHOLD_TEMP)
+    if (temp >= FAN_ON_TEMP)
     {
         isFanOn = true;
     }
-    else
+    else if (temp <= FAN_OFF_TEMP)
     {
         isFanOn = false;
     }
