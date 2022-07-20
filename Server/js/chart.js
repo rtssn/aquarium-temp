@@ -88,6 +88,7 @@ const setNowTemp = (data) => {
 
 /**
  * グラフ用にデータの変換を行います。
+ * @param {*} 取得したデータを指定します。
  */
 const convertData = (data) => {
     const labels = [];
@@ -131,6 +132,10 @@ const convertData = (data) => {
     return ret;
 };
 
+/**
+ * データ一覧表を生成します。
+ * @param {*} data 取得したデータを指定します。
+ */
 const createListTable = (data) => {
     const table = document.getElementById('list');
 
