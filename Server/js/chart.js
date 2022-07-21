@@ -29,8 +29,8 @@ const getData = () => {
 /**
  * グラフの生成を行います。
  * @param {Array<string>} labels グラフのラベルを指定します。
- * @param {Array<float>} sensor1Data 室温のデータを指定します。
- * @param {Array<float>} sensor2Data 水温のデータを指定します。
+ * @param {Array<number>} sensor1Data 室温のデータを指定します。
+ * @param {Array<number>} sensor2Data 水温のデータを指定します。
  */
 const createChart = (labels, sensor1Data, sensor2Data) => {
     const chartData = {
