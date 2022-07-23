@@ -20,11 +20,19 @@ namespace Client
         /// </summary>
         private Dictionary<int, string> deviceIds = new Dictionary<int, string>();
 
+        /// <summary>
+        /// 仮想デバイスクライアントのコンストラクタです。
+        /// デバイスIDの初期化を行います。
+        /// </summary>
         public DeviceClient()
         {
             CreateDeviceId();
         }
 
+        /// <summary>
+        /// 負荷実験処理を実行します。
+        /// 
+        /// </summary>
         public void Run()
         {
             for (int i = 0; i < clientCount; i++)
@@ -34,7 +42,7 @@ namespace Client
         }
 
         /// <summary>
-        /// 送信処理を行います。
+        /// 送信処理を非同期で行います。
         /// </summary>
         private async Task Post(int index)
         {
