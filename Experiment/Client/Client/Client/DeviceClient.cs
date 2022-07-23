@@ -54,12 +54,12 @@ namespace Client
             {
                 new Sensor()
                 {
-                    addoress = "test1",
+                    address = "test1",
                     temp = rand.Next(20, 30),
                 },
                 new Sensor()
                 {
-                    addoress = "test2",
+                    address = "test2",
                     temp = rand.Next(20, 30),
                 }
             };

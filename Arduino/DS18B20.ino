@@ -165,8 +165,8 @@ void GetTempTimer()
 void PostData(float sensor1_temp, float sensor2_temp, bool isFanOn)
 {
     String sensors = "[";
-    sensors = sensors + "{\"addoress\": \"" + hexDeviceAddress1 + "\", \"temp\": " + String(sensor1_temp) + "},";
-    sensors = sensors + "{\"addoress\": \"" + hexDeviceAddress2 + "\", \"temp\": " + String(sensor2_temp) + "}";
+    sensors = sensors + "{\"address\": \"" + hexDeviceAddress1 + "\", \"temp\": " + String(sensor1_temp) + "},";
+    sensors = sensors + "{\"address\": \"" + hexDeviceAddress2 + "\", \"temp\": " + String(sensor2_temp) + "}";
     sensors = sensors + "]";
 
     String sensorString = "\"sensors\": " + sensors;
