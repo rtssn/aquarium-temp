@@ -13,7 +13,7 @@ namespace Client
         /// <summary>
         /// 実験するクライアント数です。
         /// </summary>
-        private const int clientCount = 10000;
+        private const int clientCount = 100;
 
         /// <summary>
         /// クライアントのデバイスIDを格納するディクショナリです。
