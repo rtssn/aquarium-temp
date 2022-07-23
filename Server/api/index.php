@@ -32,7 +32,7 @@ function Post()
     $sensor1Temp = $telemetryData->sensors[0]->temp;
     $sensor2Temp = $telemetryData->sensors[1]->temp;
 
-    $result = $aquariumTempDb->Insert($sensor1Temp, $sensor2Temp, $telemetryData->isFanOn, $telemetryData->ipAddress);
+    $result = $aquariumTempDb->Insert($sensor1Temp, $sensor2Temp, $telemetryData->isFanOn, $telemetryData->ipAddress, $telemetryData->deviceId);
 
     if ($result == true)
     {

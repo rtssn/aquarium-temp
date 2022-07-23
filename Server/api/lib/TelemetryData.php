@@ -8,6 +8,11 @@ require_once('TempData.php');
 class TelemetryData
 {
     /**
+     * @var int IPアドレスです。
+     */
+    public $deviceId = "";
+
+    /**
      * @var array[TempData] センサー一覧です。
      */
     public $sensors = array();
@@ -42,6 +47,7 @@ class TelemetryData
             $sensors[] = $tempData;
         }
 
+        $this->deviceId = $data->deviceId;
         $this->ipAddress = $data->ipAddress;
         $this->isFanOn = $data->isFanOn;
     }

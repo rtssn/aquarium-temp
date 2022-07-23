@@ -2,3 +2,6 @@
 Server/api/config.json
 ArduinoOutput/
 .clang-format
+Experiment/Client/Client/.vs/
+Experiment/Client/Client/Client/obj/
+/Experiment/Client/Client/Client/bin/

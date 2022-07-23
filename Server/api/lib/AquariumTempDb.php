@@ -34,16 +34,17 @@ class AquariumTempDb
      * @param float $sensor2Temp センサー2の温度を指定します。
      * @param bool $isFanOn ファンが回転しているかを指定します。
      * @param string $ipAddress 送信元のIPアドレスを指定します。
+     * @param string $ipAddress デバイスIDを指定します。
      * @return bool 結果を返します。trueなら成功、falseなら失敗を示します。
      */
-    function Insert($sensor1Temp, $sensor2Temp, $isFanOn, $ipAddress)
+    function Insert($sensor1Temp, $sensor2Temp, $isFanOn, $ipAddress, $deviceId)
     {
         $result = false;
 
         if ($this->db != null)
         {
             $datetime = date('Y-m-d H:i:s');
-            $query = "INSERT INTO `temp` (`datetime`, `sensor1Temp`, `sensor2Temp`, `isFanOn`, `ipAddress`) VALUES ('$datetime', $sensor1Temp, $sensor2Temp, $isFanOn, '$ipAddress');";
+            $query = "INSERT INTO `temp` (`datetime`, `deviceId`, `sensor1Temp`, `sensor2Temp`, `isFanOn`, `ipAddress`) VALUES ('$datetime', '$deviceId', $sensor1Temp, $sensor2Temp, $isFanOn, '$ipAddress');";
 
             Log::VarDumpLogWrite($query);
 
