@@ -44,7 +44,7 @@ namespace Client
         /// <summary>
         /// 送信処理を非同期で行います。
         /// </summary>
-        private async Task Post(int index)
+        private async void Post(int index)
         {
             Random rand = new Random();
             string deviceId = deviceIds[index];
