@@ -46,6 +46,8 @@ const uint8_t PWM_level = 8; // PWM分解能 16bit(1～256)
 const uint8_t PWM_CH = 1;    // チャンネル
 */
 
+const String deviceId = "82d08228a35148b59ad4a11fcefef1d5";
+
 HTTPClient http;
 OneWire oneWire(ONE_WIRE_BUS);
 DallasTemperature sensors(&oneWire);
@@ -176,7 +178,9 @@ void PostData(float sensor1_temp, float sensor2_temp, bool isFanOn)
 
     String isFanOnString = "\"isFanOn\": " + String(isFanOn);
 
-    String data = "{" + sensorString + ", " + isFanOnString + ", " + ipAddressString + "}";
+    String deviceIdString = "\"deviceId\": " + deviceId;
+
+    String data = "{" + sensorString + ", " + isFanOnString + ", " + ipAddressString + ", " + deviceIdString + "}";
 
     Serial.println(data);
 
