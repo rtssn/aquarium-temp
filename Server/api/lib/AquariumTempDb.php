@@ -48,8 +48,15 @@ class AquariumTempDb
 
             Log::VarDumpLogWrite($query);
 
-            $stmt = $this->db->prepare($query);
-            $result = $stmt->execute();
+            try
+            {
+                $stmt = $this->db->prepare($query);
+                $result = $stmt->execute();
+            }
+            catch (Exception $ex)
+            {
+                Log::VarDumpLogWrite($ex);
+            }
         }
 
         return $result;
@@ -68,7 +75,6 @@ class AquariumTempDb
             $stmt->execute();
 
             $datetime = '';
-            $temp = 0;
 
             $datetime = '';
             $sensor1Temp = 0;
