@@ -34,7 +34,7 @@ td {
 
 tr:nth-child(2n) {
     background-color: rgb(219, 230, 255);
-    border-bottom: solid 1px rgb(152, 179, 243);S
+    border-bottom: solid 1px rgb(152, 179, 243);
 }
 
 .container {
