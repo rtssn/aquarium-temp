@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+
+<html lang="ja">
+
+<head>
+    <meta charset="utf8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>水槽水温</title>
+    <link rel="stylesheet" href="./css/main.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.8.0/dist/chart.min.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="innner">
+            <div id="status">
+                <h2>現在(<span id="now"></span>)</h2>
+                水温: <span id="now-tank-temp"></span>℃<br>
+                室温: <span id="now-room-temp"></span>℃<br>
+                ファン: <span id="now-fan"></span>
+            </div>
+            <div id="last-24-hours">
+                <h2>過去24時間の状況</h2>
+                <div>
+                    最高水温: <span id="max-temp"></span>℃<br>
+                    日時: <span id="max-temp-datetime"></span>
+                </div>
+                <div>
+                    最低水温: <span id="min-temp"></span>℃<br>
+                    日時: <span id="min-temp-datetime"></span>
+                </div>
+                <div>
+                    <canvas id="myChart"></canvas>
+                </div>
+            </div>
+            <div>
+                <h3>データ一覧</h3>
+                <table id="list">
+                    <tr>
+                        <th>
+                            日時
+                        </th>
+                        <th>
+                            室温
+                        </th>
+                        <th>
+                            水温
+                        </th>
+                        <th>
+                            ファン
+                        </th>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="./js/chart.js"></script>
+</body>
+
+</html>

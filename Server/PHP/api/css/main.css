@@ -1,0 +1,68 @@
+@import url('https://fonts.googleapis.com/css2?family=M+PLUS+1p&display=swap');
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #242424;
+    color: #333;
+    font-family: 'M PLUS 1p', sans-serif;
+}
+
+h2 {
+    margin: 0;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+tr {
+    border-bottom: solid 1px rgb(152, 179, 243);
+}
+
+td:first-child {
+    text-align: left !important;
+    font-weight: bold;
+}
+
+td {
+    margin: 0;
+    padding: 5px;
+    text-align: center;
+}
+
+tr:nth-child(2n) {
+    background-color: rgb(219, 230, 255);
+    border-bottom: solid 1px rgb(152, 179, 243);
+}
+
+.container {
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.innner {
+    display: block;
+    border-radius: 10px;
+    background-color: #eee;
+    width: calc(80% - 20px);
+    margin: 10px;
+    padding: 20px;
+}
+
+@media (max-width: 1000px) {
+    .innner {
+        width: calc(90% - 40px);
+    }
+}
+
+#last-24-hours {
+    margin-top: 40px;
+}
+
+#myChart {
+    height: 400px !important;
+}

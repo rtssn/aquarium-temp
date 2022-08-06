@@ -1,0 +1,4 @@
+.vscode/
+Server/api/config.json
+ArduinoOutput/
+.clang-format
