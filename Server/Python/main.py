@@ -2,14 +2,18 @@ from fastapi import FastAPI
 from pymongo import MongoClient
 from datetime import datetime, timedelta
 import mysql.connector
+import json
 
 
 from Model.Telemetry import Telemetry
 from Model.TempData import TempData
 
+configFile = open('./config.json', 'r')
+config = json.load(configFile)
+
+print(config['aquarium']['user'])
 
 db = None
-
 
 app = FastAPI()
 
@@ -22,10 +26,10 @@ async def root():
     ret: list[TempData] = list()
     try:
         db = mysql.connector.connect(
-            user='',  # ユーザー名
-            password='',  # パスワード
-            host='',  # ホスト名(IPアドレス）
-            database=''  # データベース名
+            user=config['aquarium']['user'],  # ユーザー名
+            password=config['aquarium']['password'],  # パスワード
+            host=config['aquarium']['host'],  # ホスト名(IPアドレス）
+            database=config['aquarium']['database']  # データベース名
         )
 
         if db.is_connected:
