@@ -40,7 +40,7 @@ const getNowData = (chart) => {
         .then((data) => {
             chart.data.datasets[0].data.push(data.now.sensor1TempData);
             chart.data.datasets[1].data.push(data.now.sensor2TempData);
-            chart.labels.push(data.now.datetime);
+            chart.data.labels.push(data.now.datetime);
 
             delete chart.data.datasets[0].data[0];
             delete chart.data.datasets[0].data[1];
