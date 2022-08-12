@@ -58,9 +58,22 @@ function Post()
  */
 function Get()
 {
+    $now = isset($_GET['now']);
+
     $aquariumTempDb = new AquariumTempDb();
     header("Content-Type: application/json; charset=utf-8");
     $data = $aquariumTempDb->GetData();
-    $json = json_encode($data);
-    echo $json;
+
+
+    if ($now == false)
+    {
+        $json = json_encode($data);
+        echo $json;
+    }
+    else
+    {
+        $now = $data[count($data) - 1];
+        $json = json_encode($now);
+        echo $json;
+    }
 }
