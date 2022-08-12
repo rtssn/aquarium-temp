@@ -166,7 +166,11 @@ class AquariumTempDb
     {
         $config = $this->config;
 
-        var_dump($config);
-        exit;
+        $this->db = new mysqli($config->host, $config->user, $config->password, $config->db);
+
+        if (mysqli_connect_error())
+        {
+            die("can not connect db.");
+        }
     }
 }

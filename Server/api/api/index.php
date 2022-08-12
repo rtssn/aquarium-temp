@@ -64,7 +64,6 @@ function Get()
     header("Content-Type: application/json; charset=utf-8");
     $data = $aquariumTempDb->GetData();
 
-
     if ($now == false)
     {
         $json = json_encode($data);
@@ -72,8 +71,18 @@ function Get()
     }
     else
     {
-        $now = $data[count($data) - 1];
-        $json = json_encode($now);
+        $list = $data['list'];
+        $listCount = count($list);
+
+        $now = $list[$listCount - 1];
+
+        $reqponse = array(
+            'minTemp' => $data['minTemp'],
+            'maxTemp' => $data['maxTemp'],
+            'now' => $now
+        );
+
+        $json = json_encode($reqponse);
         echo $json;
     }
 }
