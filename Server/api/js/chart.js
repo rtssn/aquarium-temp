@@ -14,10 +14,6 @@ const getData = (chart) => {
             if (chart === undefined) {
                 chart = createChart(chartData.labels, chartData.sensor1TempData, chartData.sensor2TempData);
                 timer = setInterval(getNowData, 60 * 1000, chart);
-            } else {
-                chart.data.datasets[0].data = chartData.sensor1TempData;
-                chart.data.datasets[1].data = chartData.sensor2TempData;
-                chart.update();
             }
 
             createListTable(data.list);
@@ -38,13 +34,13 @@ const getNowData = (chart) => {
     fetch('./api/index.php?now')
         .then((response) => response.json())
         .then((data) => {
-            chart.data.datasets[0].data.push(data.now.sensor1TempData);
-            chart.data.datasets[1].data.push(data.now.sensor2TempData);
+            chart.data.datasets[0].data.push(data.now.sensor1Temp);
+            chart.data.datasets[1].data.push(data.now.sensor2Temp);
             chart.data.labels.push(data.now.datetime);
 
-            delete chart.data.datasets[0].data[0];
-            delete chart.data.datasets[0].data[1];
-            delete chart.data.labels[0];
+            chart.data.datasets[0].data.shift();
+            chart.data.datasets[1].data.shift();
+            chart.data.labels.shift();
 
             chart.update();
 
