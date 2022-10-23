@@ -174,29 +174,52 @@ void GetTempTimer()
  */
 void PostData(float sensor1_temp, float sensor2_temp, bool isFanOn)
 {
-    String sensors = "[";
-    sensors = sensors + "{\"address\": \"" + hexDeviceAddress1 + "\", \"temp\": " + String(sensor1_temp) + "},";
-    sensors = sensors + "{\"address\": \"" + hexDeviceAddress2 + "\", \"temp\": " + String(sensor2_temp) + "}";
-    sensors = sensors + "]";
-
-    String sensorString = "\"sensors\": " + sensors;
     IPAddress ipAddress = WiFi.localIP();
-    String ipAddressString = "\"ipAddress\": \"" + String(ipAddress[0]) + "." + String(ipAddress[1]) + "." +
-                             String(ipAddress[2]) + "." + String(ipAddress[3]) + "\"";
+    String ipAddressString =
+        String(ipAddress[0]) + "." + String(ipAddress[1]) + "." + String(ipAddress[2]) + "." + String(ipAddress[3]);
 
-    String isFanOnString = "\"isFanOn\": " + String(isFanOn);
+    String data = "{\n";
+    data = data + "\"sensorName\":\"Room temp\",\n";
+    data = data + "\"uuid\":\"91967da94c7611eda9bd57ae55e07111\",\n";
+    data = data + "\"valueName\":\"室温\",\n";
+    data = data + "\"dataType\":\"float\",\n";
+    data = data + "\"sensorDataCount\":1,\n";
+    data = data + "\"value\":\"" + String(sensor1_temp) + "\"\n";
+    data = data + "},\n";
+    data = data + "{\n";
+    data = data + "\"sensorName\":\"Tank temp\",\n";
+    data = data + "\"uuid\":\"b76768294c7611eda9a80cd467fe4d86\",\n";
+    data = data + "\"valueName\":\"水温\",\n";
+    data = data + "\"dataType\":\"float\",\n";
+    data = data + "\"sensorDataCount\":1,\n";
+    data = data + "\"value\":\"" + String(sensor2_temp) + "\"\n";
+    data = data + "},\n";
+    data = data + "{\n";
+    data = data + "\"sensorName\":\"Is Fan On\",\n";
+    data = data + "\"uuid\":\"79802645520411ed8566cc49f61866be\",\n";
+    data = data + "\"valueName\":\"ファン\",\n";
+    data = data + "\"dataType\":\"bool\",\n";
+    data = data + "\"sensorDataCount\":1,\n";
+    data = data + "\"value\":\"" + String(isFanOn) + "\"\n";
+    data = data + "},\n";
+    data = data + "{\n";
+    data = data + "\"sensorName\":\"IP Addresss\",\n";
+    data = data + "\"uuid\":\"7d80a1c6520411ed86e1aaa0535bd9db\",\n";
+    data = data + "\"valueName\":\"IP Address\",\n";
+    data = data + "\"dataType\":\"string\",\n";
+    data = data + "\"sensorDataCount\":1,\n";
+    data = data + "\"value\":\"" + ipAddressString + "\"\n";
+    data = data + "}\n";
 
-    String deviceIdString = "\"deviceId\": " + deviceId;
+    String json = "{\n";
 
-    String data = "{" + sensorString + ", " + isFanOnString + ", " + ipAddressString + ", " + deviceIdString + "}";
+    json = json + "\"apikey\":\"381922b9515511edb962d08aa34278bc38347245515511ed85b28275d2ffc971\",\n";
+    json = json + "\"deviceUuid\":\"82d08228a35148b59ad4a11fcefef1d5\",\n";
+    json = json + "\"data\": [\n" + data + "]\n";
 
-    Serial.println(data);
+    json = json + "}";
 
-    http.begin("http://192.168.11.100/test/aqua/api/");
-    http.addHeader("Content-Type", "application/json");
-    http.POST(data);
-    Serial.println(http.getString());
-    http.end();
+    SendData(json);
 }
 
 /**
@@ -204,18 +227,41 @@ void PostData(float sensor1_temp, float sensor2_temp, bool isFanOn)
  */
 void PostError()
 {
-    String sensors = "[";
-    sensors = sensors + "{\"address\": \"" + hexDeviceAddress1 + "\"}";
-    sensors = sensors + "{\"address\": \"" + hexDeviceAddress2 + "\"}";
-    sensors = sensors + "]";
+    IPAddress ipAddress = WiFi.localIP();
+    String ipAddressString =
+        String(ipAddress[0]) + "." + String(ipAddress[1]) + "." + String(ipAddress[2]) + "." + String(ipAddress[3]);
 
-    String data = "{\"message\": \"sensor error\", \"sensors\": " + sensors + "}";
+    String data = "{\n";
+    data = data + "\"sensorName\":\"Message\",\n";
+    data = data + "\"uuid\":\"e081cc23527411eda30c884471273147\",\n";
+    data = data + "\"valueName\":\"メッセージ\",\n";
+    data = data + "\"dataType\":\"string\",\n";
+    data = data + "\"sensorDataCount\":1,\n";
+    data = data + "\"value\":\"sensor error. IP: " + ipAddressString + " address1: " + hexDeviceAddress1 + "address2" +
+           hexDeviceAddress2 + "\"\n";
+    data = data + "}\n";
 
-    Serial.println(data);
+    String json = "{\n";
 
-    http.begin("http://192.168.11.100/test/aqua/api/");
+    json = json + "\"apikey\":\"381922b9515511edb962d08aa34278bc38347245515511ed85b28275d2ffc971\",\n";
+    json = json + "\"deviceUuid\":\"82d08228a35148b59ad4a11fcefef1d5\",\n";
+    json = json + "\"data\": [\n" + data + "]\n";
+
+    json = json + "}";
+
+    SendData(json);
+}
+
+/**
+ * データの送信を行います。
+ */
+void SendData(String json)
+{
+    Serial.println(json);
+
+    http.begin("http://iot-api.sana.moe/api/Data/post");
     http.addHeader("Content-Type", "application/json");
-    http.POST(data);
+    http.POST(json);
     Serial.println(http.getString());
     http.end();
 }
