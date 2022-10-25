@@ -230,8 +230,8 @@ void PostData(float sensor1_temp, float sensor2_temp, bool isFanOn)
     tankTemp = tankTemp + "\"dataType\":\"float\",\n";
     tankTemp = tankTemp + "\"value\":\"" + String(sensor2_temp) + "\"\n";
     tankTemp = tankTemp + "}\n";
-    tankTemp = tankTemp + "]";
-    ;
+    tankTemp = tankTemp + "]\n";
+    tankTemp = tankTemp + "}";
 
     String isFanOnData = "{\n";
     isFanOnData = isFanOnData + "\"sensorName\":\"Is Fan On\",\n";
@@ -242,7 +242,8 @@ void PostData(float sensor1_temp, float sensor2_temp, bool isFanOn)
     isFanOnData = isFanOnData + "\"dataType\":\"bool\",\n";
     isFanOnData = isFanOnData + "\"value\":\"" + String(isFanOn) + "\"\n";
     isFanOnData = isFanOnData + "}\n";
-    isFanOnData = isFanOnData + "]";
+    isFanOnData = isFanOnData + "]\n";
+    isFanOnData = isFanOnData + "}";
 
     String ipAddressData = "{\n";
     ipAddressData = ipAddressData + "\"sensorName\":\"IP Addresss\",\n";
@@ -253,7 +254,8 @@ void PostData(float sensor1_temp, float sensor2_temp, bool isFanOn)
     ipAddressData = ipAddressData + "\"dataType\":\"string\",\n";
     ipAddressData = ipAddressData + "\"value\":\"" + ipAddressString + "\"\n";
     ipAddressData = ipAddressData + "}\n";
-    ipAddressData = ipAddressData + "]";
+    ipAddressData = ipAddressData + "]\n";
+    ipAddressData = ipAddressData + "}";
 
     String sensors = "[\n";
     sensors = sensors + roomTemp + ",\n";
@@ -283,9 +285,10 @@ void PostError()
     message = message + "\"value\":\"sensor error. address1: " + hexDeviceAddress1 +
               ", address2: " + hexDeviceAddress2 + ", IP Address: " + ipAddressString + "\"\n";
     message = message + "}\n";
-    message = message + "]";
+    message = message + "]\n";
+    message = message + "}\n";
 
-    String sensors = "[" + message + "]\n";
+    String sensors = "[\n" + message + "]\n";
 
     SendData(sensors);
 }
