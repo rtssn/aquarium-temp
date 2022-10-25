@@ -301,7 +301,7 @@ void SendData(String sensors)
     String json = "{\n";
     json = json + "\"apiKey\":\"381922b9515511edb962d08aa34278bc38347245515511ed85b28275d2ffc971\",\n";
     json = json + "\"deviceUuid\":\"82d08228a35148b59ad4a11fcefef1d5\",\n";
-    json = json + "\"sensoers\": " + sensors;
+    json = json + "\"sensors\": " + sensors;
     json = json + "}";
 
     Serial.println(json);
