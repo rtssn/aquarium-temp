@@ -219,7 +219,8 @@ void PostData(float sensor1_temp, float sensor2_temp, bool isFanOn)
     roomTemp = roomTemp + "\"dataType\":\"float\",\n";
     roomTemp = roomTemp + "\"value\":\"" + String(sensor1_temp) + "\"\n";
     roomTemp = roomTemp + "}\n";
-    roomTemp = roomTemp + "]";
+    roomTemp = roomTemp + "]\n";
+    roomTemp = roomTemp + "}\n";
 
     String tankTemp = "{\n";
     tankTemp = tankTemp + "\"sensorName\":\"Tank temp\",\n";
@@ -260,7 +261,7 @@ void PostData(float sensor1_temp, float sensor2_temp, bool isFanOn)
     String sensors = "[\n";
     sensors = sensors + roomTemp + ",\n";
     sensors = sensors + tankTemp + ",\n";
-    sensors = sensors + isFanOn + ",\n";
+    sensors = sensors + isFanOnData + ",\n";
     sensors = sensors + ipAddressData + "]\n";
 
     SendData(sensors);
