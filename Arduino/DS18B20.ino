@@ -280,7 +280,8 @@ void PostError()
     message = message + "{\n";
     message = message + "\"valueName\":\"メッセージ\",\n";
     message = message + "\"dataType\":\"string\",\n";
-    message = message + "\"value\":\"" + ipAddressString + "\"\n";
+    message = message + "\"value\":\"sensor error. address1: " + hexDeviceAddress1 +
+              ", address2: " + hexDeviceAddress2 + ", IP Address: " + ipAddressString + "\"\n";
     message = message + "}\n";
     message = message + "]";
 
