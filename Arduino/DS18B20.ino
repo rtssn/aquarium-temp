@@ -210,45 +210,48 @@ void PostData(float sensor1_temp, float sensor2_temp, bool isFanOn)
     String ipAddressString =
         String(ipAddress[0]) + "." + String(ipAddress[1]) + "." + String(ipAddress[2]) + "." + String(ipAddress[3]);
 
-    String data = "{\n";
-    data = data + "\"sensorName\":\"Room temp\",\n";
-    data = data + "\"uuid\":\"91967da94c7611eda9bd57ae55e07111\",\n";
-    data = data + "\"valueName\":\"室温\",\n";
-    data = data + "\"dataType\":\"float\",\n";
-    data = data + "\"sensorDataCount\":1,\n";
-    data = data + "\"value\":\"" + String(sensor1_temp) + "\"\n";
-    data = data + "},\n";
-    data = data + "{\n";
-    data = data + "\"sensorName\":\"Tank temp\",\n";
-    data = data + "\"uuid\":\"b76768294c7611eda9a80cd467fe4d86\",\n";
-    data = data + "\"valueName\":\"水温\",\n";
-    data = data + "\"dataType\":\"float\",\n";
-    data = data + "\"sensorDataCount\":1,\n";
-    data = data + "\"value\":\"" + String(sensor2_temp) + "\"\n";
-    data = data + "},\n";
-    data = data + "{\n";
-    data = data + "\"sensorName\":\"Is Fan On\",\n";
-    data = data + "\"uuid\":\"79802645520411ed8566cc49f61866be\",\n";
-    data = data + "\"valueName\":\"ファン\",\n";
-    data = data + "\"dataType\":\"bool\",\n";
-    data = data + "\"sensorDataCount\":1,\n";
-    data = data + "\"value\":\"" + String(isFanOn) + "\"\n";
-    data = data + "},\n";
-    data = data + "{\n";
-    data = data + "\"sensorName\":\"IP Addresss\",\n";
-    data = data + "\"uuid\":\"7d80a1c6520411ed86e1aaa0535bd9db\",\n";
-    data = data + "\"valueName\":\"IP Address\",\n";
-    data = data + "\"dataType\":\"string\",\n";
-    data = data + "\"sensorDataCount\":1,\n";
-    data = data + "\"value\":\"" + ipAddressString + "\"\n";
-    data = data + "}\n";
+    String roomTemp = "{\n";
+    roomTemp = roomTemp + "\"sensorName\":\"Room temp\",\n";
+    roomTemp = roomTemp + "\"uuid\":\"b76768294c7611eda9a80cd467fe4d86\",\n";
+    roomTemp = roomTemp + "\"valueName\":\"室温\",\n";
+    roomTemp = roomTemp + "\"dataType\":\"float\",\n";
+    roomTemp = roomTemp + "\"value\":\"" + String(sensor1_temp) + "\"\n";
+    roomTemp = roomTemp + "}";
+
+    String tankTemp = "{\n";
+    tankTemp = tankTemp + "\"sensorName\":\"Tank temp\",\n";
+    tankTemp = tankTemp + "\"uuid\":\"91967da94c7611eda9bd57ae55e07111\",\n";
+    tankTemp = tankTemp + "\"valueName\":\"水温\",\n";
+    tankTemp = tankTemp + "\"dataType\":\"float\",\n";
+    tankTemp = tankTemp + "\"value\":\"" + String(sensor2_temp) + "\"\n";
+    tankTemp = tankTemp + "}";
+
+    String isFanOnData = "{\n";
+    isFanOnData = isFanOnData + "\"sensorName\":\"Is Fan On\",\n";
+    isFanOnData = isFanOnData + "\"uuid\":\"79802645520411ed8566cc49f61866be\",\n";
+    isFanOnData = isFanOnData + "\"valueName\":\"ファン\",\n";
+    isFanOnData = isFanOnData + "\"dataType\":\"bool\",\n";
+    isFanOnData = isFanOnData + "\"value\":\"" + String(isFanOn) + "\"\n";
+    isFanOnData = isFanOnData + "}";
+
+    String ipAddressData = "{\n";
+    ipAddressData = ipAddressData + "\"sensorName\":\"IP Addresss\",\n";
+    ipAddressData = ipAddressData + "\"uuid\":\"7d80a1c6520411ed86e1aaa0535bd9db\",\n";
+    ipAddressData = ipAddressData + "\"valueName\":\"IP Address\",\n";
+    ipAddressData = ipAddressData + "\"dataType\":\"string\",\n";
+    ipAddressData = ipAddressData + "\"value\":\"" + ipAddressString + "\"\n";
+    ipAddressData = ipAddressData + "}";
+
+    String sensors = "[\n";
+    sensors = sensors + roomTemp + ",\n";
+    sensors = sensors + tankTemp + ",\n";
+    sensors = sensors + isFanOn + ",\n";
+    sensors = sensors + ipAddressData + "]\n";
 
     String json = "{\n";
-
-    json = json + "\"apikey\":\"381922b9515511edb962d08aa34278bc38347245515511ed85b28275d2ffc971\",\n";
+    json = json + "\"apiKey\":\"381922b9515511edb962d08aa34278bc38347245515511ed85b28275d2ffc971\",\n";
     json = json + "\"deviceUuid\":\"82d08228a35148b59ad4a11fcefef1d5\",\n";
-    json = json + "\"data\": [\n" + data + "]\n";
-
+    json = json + "\"sensoers\": " + sensors;
     json = json + "}";
 
     SendData(json);
@@ -268,17 +271,25 @@ void PostError()
     data = data + "\"uuid\":\"e081cc23527411eda30c884471273147\",\n";
     data = data + "\"valueName\":\"メッセージ\",\n";
     data = data + "\"dataType\":\"string\",\n";
-    data = data + "\"sensorDataCount\":1,\n";
     data = data + "\"value\":\"sensor error. IP: " + ipAddressString + ", address1: " + hexDeviceAddress1 +
            ", address2: " + hexDeviceAddress2 + "\"\n";
     data = data + "}\n";
 
+    String message = "{\n";
+    message = message + "\"sensorName\":\"Message\",\n";
+    message = message + "\"uuid\":\"e081cc23527411eda30c884471273147\",\n";
+    message = message + "\"valueName\":\"メッセージ\",\n";
+    message = message + "\"dataType\":\"bool\",\n";
+    message = message + "\"value\":\"sensor error. IP: " + ipAddressString + ", address1: " + hexDeviceAddress1 +
+              ", address2: " + hexDeviceAddress2 + "\"\n";
+    message = message + "}";
+
+    String sensors = "[" + message + "]\n";
+
     String json = "{\n";
-
-    json = json + "\"apikey\":\"381922b9515511edb962d08aa34278bc38347245515511ed85b28275d2ffc971\",\n";
+    json = json + "\"apiKey\":\"381922b9515511edb962d08aa34278bc38347245515511ed85b28275d2ffc971\",\n";
     json = json + "\"deviceUuid\":\"82d08228a35148b59ad4a11fcefef1d5\",\n";
-    json = json + "\"data\": [\n" + data + "]\n";
-
+    json = json + "\"sensoers\": " + sensors;
     json = json + "}";
 
     SendData(json);
